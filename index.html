@@ -1,25 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Administración de Empresas - Unitrópico</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Malla Curricular</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1 style="font-weight: 600; font-size: 1rem; color: #4b0082;">Administración de Empresas</h1>
-    <h2 style="font-weight: 400; font-size: 1rem; color: #4b0082;">Unitrópico</h2>
+    <h1>Malla Curricular</h1>
+    <h2>Administración de Empresas</h2>
+    <h3>Unitrópico</h3>
   </header>
 
-  <div id="grid" class="grid"></div>
+  <main id="mallaContainer">
+    <!-- Aquí se generarán los semestres dinámicamente -->
+  </main>
 
-  <div class="creditos">
-    <strong>Créditos restantes:</strong> <span id="creditos-restantes">154</span><br>
-    <button id="reiniciar">Reiniciar progreso</button>
-  </div>
+  <footer>
+    <p>Total de Créditos Seleccionados: <span id="totalCreditos">0</span></p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
-
