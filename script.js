@@ -1,5 +1,13 @@
+const grid = document.getElementById("grid");
+const creditosRestantes = document.getElementById("creditos-restantes");
+const btnReiniciar = document.getElementById("reiniciar");
+
+let totalCreditos = 154;
+let completados = new Set(JSON.parse(localStorage.getItem("materiasCompletadas") || "[]"));
+let creditosPorMateria = {};
+
 const ramos = [
-  // Formato: [nombre, prerrequisito, créditos, semestre]
+  // Semestre I
   ["Introducción a las Ciencias Económicas y Administrativas", null, 2, 1],
   ["Pensamiento Administrativo", null, 3, 1],
   ["Fundamentos de Contabilidad", null, 3, 1],
@@ -8,6 +16,7 @@ const ramos = [
   ["Comprensión y Producción de Textos I", null, 3, 1],
   ["Pensamiento Matemático", null, 2, 1],
 
+  // Semestre II
   ["Proceso Administrativo", "Pensamiento Administrativo", 2, 2],
   ["Costos", "Fundamentos de Contabilidad", 3, 2],
   ["Microeconomía", "Fundamentos de Economía", 3, 2],
@@ -16,6 +25,7 @@ const ramos = [
   ["Comprensión y Producción de Textos II", "Comprensión y Producción de Textos I", 3, 2],
   ["Cátedra de la Orinoquía", null, 2, 2],
 
+  // Semestre III
   ["Teoría Organizacional", "Proceso Administrativo", 2, 3],
   ["Gestión Presupuestal", "Costos", 3, 3],
   ["Macroeconomía", "Microeconomía", 3, 3],
@@ -24,6 +34,7 @@ const ramos = [
   ["Derecho Comercial y Tributario", "Derecho Laboral", 3, 3],
   ["Innovación y Creatividad", null, 2, 3],
 
+  // Semestre IV
   ["Matemática Financiera", "Gestión Presupuestal", 3, 4],
   ["Estadística Descriptiva", "Cálculo Diferencial e Integral", 3, 4],
   ["Fundamentos de Mercados", null, 2, 4],
@@ -32,6 +43,7 @@ const ramos = [
   ["Constitución Política y Ciudadanía", "Comprensión y Producción de Textos II", 2, 4],
   ["Electiva I", null, 3, 4],
 
+  // Semestre V
   ["Análisis Financiero", "Matemática Financiera", 3, 5],
   ["Estadística Inferencial", "Estadística Descriptiva", 3, 5],
   ["Fundamentos de Emprenderismo", "Innovación y Creatividad", 2, 5],
@@ -41,6 +53,7 @@ const ramos = [
   ["Metodologías en la Investigación", "Introducción a la Investigación", 2, 5],
   ["Optativa de Identidad Institucional I", "Cátedra de la Orinoquía", 2, 5],
 
+  // Semestre VI
   ["Marketing Digital", "Investigación de Mercados", 2, 6],
   ["Formulación de Proyectos", "Moneda y Banca", 3, 6],
   ["Habilidades Gerenciales", null, 3, 6],
@@ -49,6 +62,7 @@ const ramos = [
   ["Optativa de Identidad Institucional II", "Optativa de Identidad Institucional I", 2, 6],
   ["Electiva II", "Electiva I", 3, 6],
 
+  // Semestre VII
   ["Plan de Negocios", "Fundamentos de Emprenderismo", 2, 7],
   ["Gerencia Financiera y Valor Agregado", "Habilidades Gerenciales", 2, 7],
   ["Gestión de Empresas Turísticas", "Gestión Pública", 3, 7],
@@ -56,6 +70,7 @@ const ramos = [
   ["Formulación de Proyectos de Investigación", "Metodologías en la Investigación", 2, 7],
   ["Práctica I", null, 4, 7],
 
+  // Semestre VIII
   ["International Business", "Marketing Digital", 2, 8],
   ["Gerencia Estratégica", "Gerencia Financiera y Valor Agregado", 2, 8],
   ["Ética y Responsabilidad Social", "Gestión de la Organización y Producción", 2, 8],
@@ -65,96 +80,12 @@ const ramos = [
   ["Seminario", "Práctica I", 2, 8],
   ["Electiva III", "Electiva II", 3, 8],
 
+  // Semestre IX
   ["Simulación Gerencial", "Gerencia Estratégica", 3, 9],
   ["Optativa IV", "Optativa III", 2, 9],
   ["Práctica II", "Seminario", 6, 9],
   ["Electiva de Contexto", "Electiva III", 4, 9]
 ];
-
-const grid = document.getElementById("grid");
-const creditosRestantes = document.getElementById("creditos-restantes");
-let creditosTotales = 122;
-let completados = new Set();
-
-function renderMalla() {
-  const semestres = {};
-
-  // Agrupar por semestre
-  ramos.forEach(([nombre, prereq, creditos, semestre]) => {
-    if (!semestres[semestre]) semestres[semestre] = [];
-    semestres[semestre].push({ nombre, prereq, creditos });
-  });
-
-  // Render por semestre
-  for (let semestre in semestres) {
-    const contenedor = document.createElement("div");
-    contenedor.classList.add("semestre");
-    contenedor.innerHTML = `<h2>Semestre ${semestre}</h2>`;
-
-    semestres[semestre].forEach(({ nombre, prereq, creditos }) => {
-      const btn = document.createElement("button");
-      btn.classList.add("ramo");
-      btn.textContent = `${nombre} (${creditos} cr.)`;
-      btn.dataset.nombre = nombre;
-      btn.dataset.prereq = prereq;
-      btn.dataset.creditos = creditos;
-
-      if (!prereq) {
-        btn.classList.add("activo");
-      }
-
-      btn.addEventListener("click", () => {
-        if (!btn.classList.contains("activo") || btn.classList.contains("seleccionado")) return;
-
-        btn.classList.add("seleccionado");
-        completados.add(nombre);
-        creditosTotales -= parseInt(creditos);
-        creditosRestantes.textContent = creditosTotales;
-
-        // Activar materias que dependan de esta
-        document.querySelectorAll(".ramo").forEach(b => {
-          if (b.dataset.prereq === nombre) {
-            b.classList.add("activo");
-          }
-
-          // Si ya se han aprobado todos los prerrequisitos, activar
-          const prereq = b.dataset.prereq;
-          if (prereq && completados.has(prereq)) {
-            b.classList.add("activo");
-          }
-        });
-      });
-
-      contenedor.appendChild(btn);
-    });
-
-    grid.appendChild(contenedor);
-  }
-}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Malla Curricular - Administración</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1></h1>
-  <div id="grid" class="grid"></div>
-  <div class="creditos">
-    <strong>Créditos restantes:</strong> <span id="creditos-restantes">154</span><br>
-    <button id="reiniciar">Reiniciar progreso</button>
-  </div>
-  <script src="script.js"></script>
-</body>
-</html>
-const grid = document.getElementById("grid");
-const creditosRestantes = document.getElementById("creditos-restantes");
-const btnReiniciar = document.getElementById("reiniciar");
-
-let totalCreditos = 154;
-let completados = new Set(JSON.parse(localStorage.getItem("materiasCompletadas") || "[]"));
-let creditosPorMateria = {};
 
 function guardarProgreso() {
   localStorage.setItem("materiasCompletadas", JSON.stringify([...completados]));
@@ -167,7 +98,6 @@ function calcularRestantes() {
 
 function renderMalla() {
   grid.innerHTML = "";
-
   const semestres = {};
   ramos.forEach(([nombre, prereq, creditos, semestre]) => {
     if (!semestres[semestre]) semestres[semestre] = [];
@@ -228,7 +158,3 @@ btnReiniciar.addEventListener("click", () => {
 });
 
 renderMalla();
-
-
-renderMalla();
-
