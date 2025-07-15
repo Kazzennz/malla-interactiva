@@ -131,6 +131,86 @@ function renderMalla() {
     grid.appendChild(contenedor);
   }
 }
+// Suponiendo que tienes ya definido el array "ramos" como antes y que cada uno tiene [nombre, prereq, creditos, semestre]
+const grid = document.getElementById("grid");
+const creditosAcumulados = document.getElementById("creditos-acumulados");
+const creditosRestantes = document.getElementById("creditos-restantes");
+
+let totalCreditos = 154;
+let completados = new Set(JSON.parse(localStorage.getItem("materiasCompletadas") || "[]"));
+let creditosPorMateria = {};
+
+function guardarProgreso() {
+  localStorage.setItem("materiasCompletadas", JSON.stringify([...completados]));
+}
+
+function renderMalla() {
+  const semestres = {};
+
+  ramos.forEach(([nombre, prereq, creditos, semestre]) => {
+    if (!semestres[semestre]) semestres[semestre] = [];
+    semestres[semestre].push({ nombre, prereq, creditos });
+    creditosPorMateria[nombre] = creditos;
+  });
+
+  let acumuladosTotales = 0;
+
+  for (let semestre in semestres) {
+    const contenedor = document.createElement("div");
+    contenedor.classList.add("semestre");
+    const encabezado = document.createElement("h2");
+    encabezado.textContent = `📘 Semestre ${semestre}`;
+    contenedor.appendChild(encabezado);
+
+    let acumuladosSemestre = 0;
+
+    semestres[semestre].forEach(({ nombre, prereq, creditos }) => {
+      const btn = document.createElement("button");
+      btn.classList.add("ramo");
+      btn.textContent = nombre;
+      btn.dataset.nombre = nombre;
+      btn.dataset.prereq = prereq;
+      btn.dataset.creditos = creditos;
+
+      if (!prereq || completados.has(prereq)) {
+        btn.classList.add("activo");
+      }
+
+      if (completados.has(nombre)) {
+        btn.classList.add("seleccionado");
+        acumuladosSemestre += parseInt(creditos);
+        acumuladosTotales += parseInt(creditos);
+      }
+
+      btn.addEventListener("click", () => {
+        if (!btn.classList.contains("activo") || btn.classList.contains("seleccionado")) return;
+
+        btn.classList.add("seleccionado");
+        completados.add(nombre);
+        guardarProgreso();
+        renderMallaDesdeCero();
+      });
+
+      contenedor.appendChild(btn);
+    });
+
+    const creditosDiv = document.createElement("div");
+    creditosDiv.classList.add("creditos-semestre");
+    creditosDiv.textContent = `Créditos cursados en este semestre: ${acumuladosSemestre}`;
+    contenedor.appendChild(creditosDiv);
+    grid.appendChild(contenedor);
+  }
+
+  creditosAcumulados.textContent = acumuladosTotales;
+  creditosRestantes.textContent = totalCreditos - acumuladosTotales;
+}
+
+function renderMallaDesdeCero() {
+  grid.innerHTML = "";
+  renderMalla();
+}
+
+renderMallaDesdeCero();
 
 renderMalla();
 
