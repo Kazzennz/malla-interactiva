@@ -1,7 +1,7 @@
 /* style.css */
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: #f8f5fc;
+  background-color: #f5f0fa;
   margin: 0;
   padding: 1rem;
   color: #4b0082;
@@ -9,11 +9,11 @@ body {
 
 header {
   text-align: center;
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.8rem;
 }
 
 header h1 {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 600;
   margin: 0;
 }
@@ -33,8 +33,8 @@ header h2 {
 }
 
 .semestre {
-  min-width: 100vw;
-  max-width: 100vw;
+  min-width: 90vw;
+  max-width: 90vw;
   background-color: #e9d8fd;
   border: 2px dashed #9b5de5;
   border-radius: 10px;
@@ -59,7 +59,7 @@ header h2 {
   width: 100%;
   margin: 0.3rem 0;
   padding: 0.7rem;
-  font-size: 1rem;
+  font-size: 1.05rem;
   background-color: #f3e8ff;
   border: 1px dashed #c084fc;
   border-radius: 6px;
@@ -95,13 +95,15 @@ header h2 {
   color: #4b0082;
   font-weight: 600;
   text-align: center;
+  line-height: 1.2;
 }
 
 .creditos {
   margin-top: 2rem;
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #4b0082;
+  font-weight: 600;
 }
 
 #reiniciar {
