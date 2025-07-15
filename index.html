@@ -3,25 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Malla Curricular</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>Administración de Empresas - Unitrópico</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <h1>Malla Curricular</h1>
-    <h2>Administración de Empresas</h2>
-    <h3>Unitrópico</h3>
+    <h1>Administración de Empresas</h1>
+    <h2>Unitrópico</h2>
   </header>
 
+  <!-- Aquí se mostrarán los semestres -->
   <main id="mallaContainer">
-    <!-- Aquí se generarán los semestres dinámicamente -->
+    <!-- JavaScript insertará aquí los semestres -->
   </main>
 
+  <!-- Contador de créditos y botón -->
   <footer>
-    <p>Total de Créditos Seleccionados: <span id="totalCreditos">0</span></p>
+    <div class="creditos-totales">
+      <p><strong>Créditos seleccionados:</strong> <span id="creditosSeleccionados">0</span></p>
+      <p><strong>Créditos faltantes:</strong> <span id="creditosFaltantes">154</span></p>
+      <button id="reiniciar">Reiniciar Selección</button>
+    </div>
   </footer>
 
+  <!-- Script de funcionamiento -->
   <script src="script.js"></script>
 </body>
 </html>
