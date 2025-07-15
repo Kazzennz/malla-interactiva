@@ -14,13 +14,12 @@ header {
 
 .grid {
   display: flex;
-  overflow-x: auto;
+  flex-direction: column;
   gap: 1rem;
-  padding-bottom: 1rem;
 }
 
 .semestre {
-  flex: 0 0 230px;
+  width: 100%;
   background-color: #e9d8fd;
   border: 2px dashed #9b5de5;
   border-radius: 10px;
@@ -97,3 +96,4 @@ header {
 #reiniciar:hover {
   background-color: #9b5de5;
 }
+
