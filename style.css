@@ -1,53 +1,72 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #f4edfa;
+  background-color: #f8f2fd;
   color: #3e2a58;
-  text-align: center;
   margin: 0;
   padding: 2rem;
+  text-align: center;
 }
 
 h1 {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  font-weight: bold;
+}
+
+.linea1 {
+  font-size: 2rem;
+  color: #7d3c98;
+}
+
+.linea2 {
   font-size: 1.8rem;
-  color: #5e2d88;
+  color: #8e44ad;
+}
+
+.linea3 {
+  font-size: 1.6rem;
+  color: #9b59b6;
 }
 
 .grid {
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 1.5rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-bottom: 2rem;
 }
 
 .semestre {
-  border: 2px solid #8d4ebf;
+  border: 2px solid #b27de4;
   background-color: #efe3f9;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 1rem;
-  margin-bottom: 1.5rem;
+  min-width: 260px;
+  text-align: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
 .semestre h2 {
-  margin-bottom: 0.5rem;
-  border-bottom: 1px solid #8d4ebf;
-  padding-bottom: 0.5rem;
-  font-size: 1.3rem;
+  font-weight: bold;
+  border-bottom: 1px solid #b27de4;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
 }
 
 .ramo {
-  display: inline-block;
   background-color: #ebd7fc;
-  border: 2px solid #b27de4;
+  border: 2px solid #c8a7ec;
   color: #3e2a58;
-  border-radius: 8px;
-  margin: 6px;
-  padding: 12px 14px;
-  min-width: 240px;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
   cursor: not-allowed;
   opacity: 0.5;
   transition: all 0.3s ease;
+  width: 100%;
   font-weight: 500;
-  text-align: left;
 }
 
 .ramo.activo {
@@ -56,8 +75,9 @@ h1 {
 }
 
 .ramo.seleccionado {
-  background-color: #c9a1e6;
+  background-color: #d5b3f2;
   text-decoration: line-through;
+  font-style: italic;
   font-weight: bold;
   color: #4a1d78;
 }
@@ -69,7 +89,7 @@ h1 {
 }
 
 .creditos {
-  margin-top: 2rem;
+  margin-top: 3rem;
   font-size: 1.2rem;
   background: #e8dff5;
   display: inline-block;
@@ -77,4 +97,21 @@ h1 {
   border-radius: 12px;
   font-weight: bold;
   border: 2px solid #8d4ebf;
+  color: #5e2d88;
+}
+
+#reiniciar {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #d9b3f2;
+  color: #4a1d78;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#reiniciar:hover {
+  background-color: #c59ce3;
 }
