@@ -148,6 +148,86 @@ function renderMalla() {
   <script src="script.js"></script>
 </body>
 </html>
+const grid = document.getElementById("grid");
+const creditosRestantes = document.getElementById("creditos-restantes");
+const btnReiniciar = document.getElementById("reiniciar");
+
+let totalCreditos = 154;
+let completados = new Set(JSON.parse(localStorage.getItem("materiasCompletadas") || "[]"));
+let creditosPorMateria = {};
+
+function guardarProgreso() {
+  localStorage.setItem("materiasCompletadas", JSON.stringify([...completados]));
+}
+
+function calcularRestantes() {
+  let usados = [...completados].reduce((sum, nombre) => sum + (creditosPorMateria[nombre] || 0), 0);
+  creditosRestantes.textContent = totalCreditos - usados;
+}
+
+function renderMalla() {
+  grid.innerHTML = "";
+
+  const semestres = {};
+  ramos.forEach(([nombre, prereq, creditos, semestre]) => {
+    if (!semestres[semestre]) semestres[semestre] = [];
+    semestres[semestre].push({ nombre, prereq, creditos });
+    creditosPorMateria[nombre] = creditos;
+  });
+
+  for (let i = 1; i <= Object.keys(semestres).length; i++) {
+    const contenedor = document.createElement("div");
+    contenedor.classList.add("semestre");
+    const encabezado = document.createElement("h2");
+    encabezado.textContent = `${i}º Semestre`;
+    contenedor.appendChild(encabezado);
+
+    let acumuladosSemestre = 0;
+
+    semestres[i].forEach(({ nombre, prereq, creditos }) => {
+      const btn = document.createElement("button");
+      btn.classList.add("ramo");
+      btn.textContent = nombre;
+
+      if (!prereq || completados.has(prereq)) {
+        btn.classList.add("activo");
+      }
+
+      if (completados.has(nombre)) {
+        btn.classList.add("seleccionado");
+        acumuladosSemestre += creditos;
+      }
+
+      btn.addEventListener("click", () => {
+        if (!btn.classList.contains("activo") || btn.classList.contains("seleccionado")) return;
+        completados.add(nombre);
+        guardarProgreso();
+        renderMalla();
+        calcularRestantes();
+      });
+
+      contenedor.appendChild(btn);
+    });
+
+    const creditosDiv = document.createElement("div");
+    creditosDiv.classList.add("creditos-semestre");
+    creditosDiv.textContent = `Créditos en este semestre: ${acumuladosSemestre}`;
+    contenedor.appendChild(creditosDiv);
+    grid.appendChild(contenedor);
+  }
+
+  calcularRestantes();
+}
+
+btnReiniciar.addEventListener("click", () => {
+  if (confirm("¿Estás segura de que quieres reiniciar todo tu progreso?")) {
+    completados.clear();
+    guardarProgreso();
+    renderMalla();
+  }
+});
+
+renderMalla();
 
 
 renderMalla();
