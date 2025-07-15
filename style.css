@@ -1,130 +1,30 @@
-/* style.css */
-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #f8f5fc;
-  margin: 0;
-  padding: 0;
-  color: #4b0082;
-  overflow-x: hidden;
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Administración de Empresas - Unitrópico</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Administración de Empresas</h1>
+    <h2>Unitrópico</h2>
+  </header>
 
-header {
-  text-align: center;
-  margin: 0;
-  padding: 1rem 0 0.3rem;
-}
+  <main id="mallaContainer">
+    <!-- Aquí se insertan los semestres dinámicamente con JavaScript -->
+  </main>
 
-header h1 {
-  font-size: 1.7rem;
-  font-weight: 600;
-  margin: 0;
-  color: #4b0082;
-}
+  <footer>
+    <div class="creditos-totales">
+      <p><strong>Créditos seleccionados:</strong> <span id="creditosSeleccionados">0</span></p>
+      <p><strong>Créditos faltantes:</strong> <span id="creditosFaltantes">154</span></p>
+      <button id="reiniciar">Reiniciar Selección</button>
+    </div>
+  </footer>
 
-header h2 {
-  font-size: 1.7rem;
-  font-weight: 400;
-  margin: 0.2rem 0 0.8rem;
-  color: #4b0082;
-}
-
-.grid {
-  display: flex;
-  flex-direction: row;
-  overflow-x: auto;
-  gap: 1rem;
-  padding: 0;
-  margin: 0;
-}
-
-.semestre {
-  min-width: 100vw;
-  max-width: 100vw;
-  height: 100vh;
-  background-color: #e9d8fd;
-  border: 2px dashed #9b5de5;
-  border-radius: 0;
-  padding: 0.6rem 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  flex-shrink: 0;
-  box-sizing: border-box;
-}
-
-.semestre h2 {
-  font-size: 1.3rem;
-  color: #5c2d91;
-  border-bottom: 1px solid #a084ca;
-  margin: 0.6rem 0 0.8rem;
-  text-align: center;
-  width: 100%;
-}
-
-.ramo {
-  width: 100%;
-  margin: 0.3rem 0;
-  padding: 0.6rem 0.5rem;
-  font-size: 1rem;
-  background-color: #f3e8ff;
-  border: 1px dashed #c084fc;
-  border-radius: 6px;
-  color: #4b0082;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  word-wrap: break-word;
-  white-space: normal;
-  line-height: 1.4;
-}
-
-.ramo.activo:hover {
-  background-color: #e0bbff;
-}
-
-.ramo.seleccionado {
-  background-color: #d0a8ec;
-  text-decoration: line-through;
-  font-style: italic;
-  color: #5c2d91;
-}
-
-.ramo:not(.activo):not(.seleccionado) {
-  background-color: #f0ebf8;
-  color: #b19cd9;
-  cursor: default;
-}
-
-.creditos-semestre {
-  margin-top: 1rem;
-  font-size: 1.1rem;
-  color: #4b0082;
-  font-weight: 600;
-  text-align: center;
-  line-height: 1.3;
-}
-
-.creditos {
-  margin-top: 1.5rem;
-  text-align: center;
-  font-size: 1.2rem;
-  color: #4b0082;
-}
-
-#reiniciar {
-  margin-top: 0.7rem;
-  padding: 0.6rem 1.2rem;
-  background-color: #c084fc;
-  border: none;
-  border-radius: 6px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 1.05rem;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-#reiniciar:hover {
-  background-color: #9b5de5;
-}
+  <script src="script.js"></script>
+</body>
+</html>
