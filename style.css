@@ -12,21 +12,6 @@ header {
   margin-bottom: 2rem;
 }
 
-header h1 {
-  font-size: 2rem;
-  color: #a566c7;
-}
-
-header h2 {
-  font-size: 1.5rem;
-  color: #915fb5;
-}
-
-header h3 {
-  font-size: 1.2rem;
-  color: #7a4c9e;
-}
-
 .grid {
   display: flex;
   overflow-x: auto;
@@ -112,4 +97,3 @@ header h3 {
 #reiniciar:hover {
   background-color: #9b5de5;
 }
-
